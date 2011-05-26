@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Moving Canvas object with Keyboard</title>
+
+<link rel="stylesheet" href="main.css"/>
+
+<script type="text/javascript">
+
+//these are the global variables which are used in the execution of this script
+var canvas;
+var context;
+var width = 800;
+var height = 300;
+var radius = 10;
+var x=200;
+var y=200;
+var dx=0;
+var dy=0;
+
+//this function is called first when the page gets fully loaded
+function load() {
+	canvas = document.getElementById("canvas");
+	context = canvas.getContext("2d");
+
+	window.onkeydown = keydownControl;
+
+	setInterval(moveBall,15);
+
+	drawRect();
+	drawCircle();
+}
+
+//draws a rectangle around the canvas
+function drawRect() {
+	context.beginPath();
+	context.strokeRect(0,0,width,height)
+	context.closePath();
+	context.fill();
+}
+
+//draws a circle of a certain radius at (x,y) location
+function drawCircle() {
+	context.beginPath();
+	context.arc(x,y,radius,0,2*Math.PI,true);
+	context.closePath();
+	context.fill();
+}
+
+//erases the whole canvas
+function clearCanvas() {
+	context.clearRect(0,0,width,height);
+}
+
+//this function is called repeatedly at an interval of 15ms
+function moveBall() {
+	clearCanvas();
+	x+=dx;
+	y+=dy;
+
+	//if ball is at right wall
+	if(x>=width+radius) {
+		x=0;
+	}
+	//if ball is at left wall
+	else if(x<=0) {
+		x = width-radius;
+	}
+	//if ball is at lower wall
+	else if(y>=height+radius) {
+		y=0;
+	}
+	//if ball is at upper wall
+	else if(y<=0) {
+		y = height-radius;
+	}
+
+	drawRect();
+	drawCircle();
+}
+
+//this function whenever any key is pressed
+function keydownControl(e) {
+	if(e.keyCode==37) {     
+			dx = -2;
+			dy = 0;
+	}
+	else if(e.keyCode==38) {
+			dx = 0;
+			dy = -2;
+	}
+	else if(e.keyCode==39) {
+			dx = 2;
+			dy = 0;
+	}
+	else if(e.keyCode==40) {
+			dx = 0;
+			dy = 2;
+	}
+}
+
+window.addEventListener("load",load,true);
+
+</script>
+</head>
+<body>
+<div id="wrapper">
+	<canvas id="canvas" height="300" width="800">
+	Your browser does not support HTML5 Canvas. Please upgrade to a newer version.
+	</canvas>
+	<p>
+	Press arrow keys on your keyboard and see the ball above moving
+	</p>
+</div>
+</body>
+</html>
